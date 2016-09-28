@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mybatis.demo.dao.UserMapper">
+<mapper namespace="com.mybatis.demo.mybatis.mapper.BaseMapper">
     <!--查询所有用户-->
     <select id="getAllUser" resultType="com.mybatis.demo.model.UserModel">
         select * from T_User
@@ -12,13 +12,13 @@
     <select id="getUserList"
             parameterType="com.mybatis.demo.datacontract.request.GetUserListRequest"
             resultType="com.mybatis.demo.datacontract.response.GetUserListResponse">
-        <!--bind name="userName" value="'%' + _parameter.getUserName() + '%'" /-->
+        <bind name="userName" value="'%' + _parameter.getUserName() + '%'" />
         select a.*,b.Name as RoleName,c.Name as CreateUser from T_User a
         left join T_Role b on b.ID=a.RoleID
         left join T_User c on c.ID=a.CreateBy
         where 1=1
         <if test="userName != null">
-            and a.UserName like CONTACT(CONTACT('%',#{userName}),'%')
+            and a.UserName like #{userName}
         </if>
         order by a.CreateTime desc
     </select>
